@@ -1,0 +1,674 @@
+.demo {
+	background: var(--surface);
+	border: 1px solid var(--line);
+}
+.demo-topline {
+	font-family: var(--mono);
+	font-size: 10px;
+	line-height: 1.5;
+	display: flex;
+	justify-content: space-between;
+	gap: 16px;
+	padding: 22px 28px;
+	border-bottom: 1px solid var(--line);
+	color: var(--secondary);
+}
+.demo-controls,
+.route-scenarios {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	padding: 0 28px;
+}
+.demo-controls button,
+.route-scenarios button,
+.route-actions button {
+	background: transparent;
+	border: 1px solid var(--line);
+	min-height: 46px;
+	padding: 12px 18px;
+	font-size: 12px;
+}
+.demo-controls button[aria-pressed='true'],
+.route-scenarios button[aria-pressed='true'] {
+	border-color: var(--signal);
+	color: var(--signal);
+}
+.demo-controls button:hover,
+.route-scenarios button:hover {
+	border-color: var(--secondary);
+}
+.demo-controls .reset,
+.route-actions .reset {
+	margin-left: auto;
+	border-color: transparent;
+	color: var(--secondary);
+	display: flex;
+	gap: 16px;
+	align-items: center;
+}
+.demo-description {
+	font-size: 14px;
+	padding: 20px 28px 0;
+	color: var(--ink);
+	min-height: 46px;
+}
+.illustration-note {
+	font-size: 11px;
+	color: var(--muted);
+	padding: 12px 28px 22px;
+	line-height: 1.6;
+}
+
+.kanade-demo {
+	--field-ink: #171a17;
+	--field-secondary: #484e46;
+	background: #c7cac1;
+	color: var(--field-ink);
+	border: 0;
+}
+.kanade-demo .demo-topline {
+	color: var(--field-secondary);
+	border-color: #9ea399;
+}
+.island-field {
+	position: relative;
+	height: 352px;
+	display: flex;
+	justify-content: center;
+	padding-top: 46px;
+}
+.island-axis {
+	position: absolute;
+	left: 50%;
+	top: 0;
+	bottom: 82px;
+	width: 1px;
+	background: #a2a89a;
+}
+.island-axis::before {
+	content: '';
+	width: 13px;
+	height: 1px;
+	background: #737c6c;
+	position: absolute;
+	top: 24px;
+	left: -6px;
+}
+.island {
+	position: relative;
+	background: #080909;
+	color: #f2f0e9;
+	border-radius: 28px;
+	width: 104px;
+	height: 46px;
+	display: grid;
+	place-items: center;
+	transition:
+		width var(--morph),
+		height var(--morph),
+		border-radius var(--morph);
+	z-index: 1;
+	overflow: hidden;
+}
+.island.compact {
+	width: 234px;
+	height: 50px;
+}
+.island.peek {
+	width: 310px;
+	height: 84px;
+	border-radius: 30px;
+}
+.island.expanded {
+	width: 370px;
+	height: 178px;
+	border-radius: 30px;
+}
+.island-clock {
+	font-family: var(--mono);
+	font-size: 14px;
+}
+.island-content {
+	width: 100%;
+	display: grid;
+	grid-template-columns: 48px 1fr;
+	gap: 10px 16px;
+	align-items: center;
+	padding: 18px 24px;
+}
+.compact .island-content {
+	grid-template-columns: 28px 1fr 16px;
+	padding: 10px 16px;
+	gap: 10px;
+}
+.record-symbol {
+	width: 48px;
+	height: 48px;
+	border: 1px solid #4b504a;
+	display: grid;
+	place-items: center;
+	border-radius: 50%;
+}
+.record-symbol > span {
+	width: 18px;
+	height: 18px;
+	border-radius: 50%;
+	border: 1px solid #8c9490;
+}
+.compact .record-symbol {
+	width: 28px;
+	height: 28px;
+}
+.compact .record-symbol > span {
+	width: 10px;
+	height: 10px;
+}
+.track-copy strong {
+	display: block;
+	font-family: var(--display);
+	font-size: 17px;
+	font-weight: 500;
+}
+.track-copy > span {
+	display: block;
+	margin-top: 5px;
+	color: #b1b5b2;
+	font-size: 11px;
+	white-space: nowrap;
+}
+.compact .track-copy strong {
+	font-size: 13px;
+}
+.media-mark {
+	font-size: 17px;
+	color: #b1b5b2;
+}
+.media-divider {
+	grid-column: 1 / -1;
+	height: 1px;
+	background: #303536;
+	margin-top: 10px;
+}
+.media-controls {
+	display: flex;
+	grid-column: 1 / -1;
+	align-items: center;
+	justify-content: space-between;
+}
+.media-controls > span {
+	font-family: var(--mono);
+	font-size: 10px;
+}
+.media-controls small {
+	color: #b1b5b2;
+	font-size: 9px;
+}
+.media-toggle {
+	width: 44px;
+	height: 44px;
+	border: 1px solid #303536;
+	background: transparent;
+	color: #f2f0e9;
+	font-size: 17px;
+}
+.field-annotation {
+	position: absolute;
+	bottom: 38px;
+	font-family: var(--mono);
+	font-size: 10px;
+	letter-spacing: 0.045em;
+	color: var(--field-secondary);
+}
+.field-annotation > span {
+	display: block;
+	text-align: center;
+	font-size: 24px;
+	margin-bottom: 8px;
+}
+.field-coordinate {
+	position: absolute;
+	right: 28px;
+	top: 46px;
+	color: var(--field-secondary);
+	font-family: var(--mono);
+	font-size: 10px;
+	line-height: 1.5;
+}
+.kanade-demo .demo-controls button {
+	border-color: #8d9685;
+	color: var(--field-ink);
+}
+.kanade-demo .demo-controls button[aria-pressed='true'] {
+	background: #171a17;
+	color: #f2f0e9;
+	border-color: #171a17;
+}
+.kanade-demo .demo-controls .reset {
+	border-color: transparent;
+	color: var(--field-secondary);
+}
+.kanade-demo .demo-description {
+	color: var(--field-ink);
+}
+.kanade-demo .illustration-note {
+	color: var(--field-secondary);
+}
+.kanade-demo button:focus-visible {
+	outline-color: #171a17;
+}
+.kanade-demo .media-toggle:focus-visible {
+	outline-color: #c5f277;
+}
+
+.kinetix-demo {
+	background: var(--ground);
+}
+.route-field {
+	height: 326px;
+	margin: 24px 28px 20px;
+	position: relative;
+}
+.route-lines {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+}
+.route-lines path {
+	fill: none;
+	stroke: var(--line);
+	stroke-width: 1.5;
+	vector-effect: non-scaling-stroke;
+}
+.route-lines .route-primary,
+.route-lines .route-secondary {
+	opacity: 0;
+	stroke: var(--signal);
+	transition: opacity var(--short);
+}
+.route-lines .active {
+	opacity: 1;
+}
+.route-lines .rejected {
+	opacity: 1;
+	stroke: var(--secondary);
+	stroke-dasharray: 4 6;
+}
+.request-dot {
+	fill: var(--signal);
+}
+.route-node {
+	position: absolute;
+	background: var(--ground);
+	border: 1px solid var(--line);
+	padding: 18px 20px;
+	width: 25%;
+	min-height: 106px;
+	transform: translate(-50%, -50%);
+}
+.route-node .technical {
+	font-size: 9px;
+	color: var(--muted);
+	display: block;
+	white-space: nowrap;
+}
+.route-node strong {
+	display: block;
+	font-family: var(--display);
+	font-weight: 500;
+	font-size: 26px;
+	letter-spacing: -0.04em;
+	margin: 7px 0;
+}
+.route-node small {
+	display: block;
+	font-size: 11px;
+	color: var(--secondary);
+}
+.client {
+	top: 50%;
+	left: 14.44%;
+	width: 23%;
+}
+.router {
+	top: 50%;
+	left: 47.22%;
+	width: 29%;
+}
+.target-a {
+	top: 23.33%;
+	left: 86.11%;
+}
+.target-b {
+	top: 76.66%;
+	left: 86.11%;
+}
+.route-node.chosen {
+	border-color: var(--signal);
+}
+.route-node.chosen strong,
+.route-node.chosen small {
+	color: var(--signal);
+}
+.route-actions {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 16px;
+	padding: 20px 28px 0;
+}
+.demo .action-button {
+	border-color: var(--signal);
+	color: var(--signal);
+	display: inline-flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 26px;
+}
+.route-actions .reset {
+	margin-left: 0;
+}
+.route-state {
+	margin-left: auto;
+	color: var(--secondary);
+}
+.kinetix-demo .demo-description {
+	max-width: 750px;
+}
+
+.merro-demo {
+	background: var(--surface);
+}
+.merro-objective {
+	padding: 30px 28px;
+	display: grid;
+	grid-template-columns: 160px 1fr;
+	align-items: center;
+	gap: 8px;
+	border-bottom: 1px solid var(--line);
+}
+.merro-objective > span {
+	color: var(--secondary);
+}
+.merro-objective > p {
+	font-family: var(--display);
+	font-size: 30px;
+	letter-spacing: -0.04em;
+	line-height: 1.2;
+}
+.merro-objective > span:last-child {
+	grid-column: 2;
+	font-size: 9px;
+	color: var(--muted);
+}
+.lifecycle-lanes {
+	padding: 0 28px;
+}
+.lifecycle-lanes li {
+	display: grid;
+	grid-template-columns: 46px 1fr 180px 24px;
+	align-items: center;
+	gap: 16px;
+	padding: 24px 0;
+	border-bottom: 1px solid var(--line);
+}
+.lane-number {
+	font-family: var(--mono);
+	font-size: 11px;
+	color: var(--muted);
+}
+.lifecycle-lanes h4 {
+	font-size: 25px;
+	letter-spacing: -0.035em;
+	color: var(--secondary);
+}
+.lane-state {
+	font-family: var(--mono);
+	font-size: 10px;
+	color: var(--muted);
+}
+.lane-indicator {
+	color: var(--muted);
+	text-align: right;
+	font-size: 12px;
+}
+.lifecycle-lanes .current h4,
+.lifecycle-lanes .current .lane-state,
+.lifecycle-lanes .current .lane-indicator {
+	color: var(--signal);
+}
+.lifecycle-lanes .complete h4,
+.lifecycle-lanes .complete .lane-state {
+	color: var(--ink);
+}
+.lifecycle-detail {
+	margin: 26px 28px;
+	display: grid;
+	grid-template-columns: 200px 1fr;
+	gap: 30px;
+	min-height: 50px;
+}
+.lifecycle-detail > span {
+	color: var(--secondary);
+}
+.lifecycle-detail p {
+	font-size: 14px;
+	max-width: 620px;
+}
+.merro-controls {
+	padding-bottom: 8px;
+}
+
+@media (max-width: 1100px) {
+	.route-node {
+		padding: 14px 12px;
+	}
+	.route-node .technical {
+		font-size: 8px;
+	}
+	.route-node strong {
+		font-size: 24px;
+	}
+	.route-state {
+		flex-basis: 100%;
+		margin-left: 0;
+	}
+}
+@media (max-width: 760px) {
+	.demo-topline {
+		padding: 18px 16px;
+		font-size: 8px;
+	}
+	.demo-topline > span:last-child {
+		text-align: right;
+	}
+	.demo-controls,
+	.route-scenarios {
+		padding-inline: 16px;
+		gap: 8px;
+	}
+	.demo-controls button,
+	.route-scenarios button,
+	.route-actions button {
+		padding: 10px 12px;
+		font-size: 11px;
+		min-height: 44px;
+	}
+	.demo-controls .reset {
+		margin-left: 0;
+	}
+	.demo-description {
+		padding: 18px 16px 0;
+		font-size: 12px;
+		min-height: 56px;
+	}
+	.illustration-note {
+		padding: 12px 16px 20px;
+		font-size: 10px;
+	}
+	.island-field {
+		height: 300px;
+		padding-top: 36px;
+	}
+	.island.expanded {
+		width: calc(100% - 24px);
+		max-width: 370px;
+		height: 168px;
+		border-radius: 24px;
+	}
+	.island.peek {
+		width: calc(100% - 44px);
+		max-width: 310px;
+	}
+	.island.compact {
+		width: 214px;
+	}
+	.island-content {
+		padding: 16px;
+		gap: 10px 12px;
+		grid-template-columns: 40px 1fr;
+	}
+	.record-symbol {
+		height: 40px;
+		width: 40px;
+	}
+	.track-copy strong {
+		font-size: 16px;
+	}
+	.track-copy > span {
+		font-size: 9px;
+	}
+	.field-coordinate {
+		display: none;
+	}
+	.field-annotation {
+		font-size: 8px;
+		bottom: 30px;
+	}
+	.field-annotation > span {
+		font-size: 20px;
+	}
+	.kanade-demo .demo-controls {
+		gap: 6px;
+	}
+	.kanade-demo .demo-controls button {
+		padding-inline: 10px;
+	}
+	.kanade-demo .demo-controls .reset {
+		flex-basis: 100%;
+		justify-content: end;
+	}
+	.route-field {
+		height: auto;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		padding: 8px 0 0;
+		margin: 20px 16px 28px;
+		gap: 28px 12px;
+	}
+	.route-lines {
+		display: none;
+	}
+	.route-node {
+		position: relative;
+		top: auto;
+		left: auto;
+		transform: none;
+		width: 100%;
+		min-height: 96px;
+		padding: 14px 12px;
+	}
+	.route-node .technical {
+		font-size: 7px;
+		white-space: normal;
+	}
+	.route-node strong {
+		font-size: 23px;
+	}
+	.route-node small {
+		font-size: 10px;
+	}
+	.client,
+	.router {
+		grid-column: 1 / -1;
+	}
+	.client::after,
+	.router::after {
+		content: '↓';
+		position: absolute;
+		color: var(--secondary);
+		bottom: -26px;
+		left: 50%;
+		font-family: var(--mono);
+		font-size: 14px;
+	}
+	.router::after {
+		content: '↙   ↘';
+		white-space: pre;
+		transform: translateX(-50%);
+	}
+	.route-actions {
+		padding: 20px 16px 0;
+		gap: 8px;
+	}
+	.route-state {
+		font-size: 9px;
+		margin-top: 10px;
+	}
+	.merro-objective {
+		display: block;
+		padding: 24px 16px;
+	}
+	.merro-objective p {
+		font-size: 25px;
+		margin: 12px 0;
+	}
+	.merro-objective > span:last-child {
+		font-size: 8px;
+	}
+	.lifecycle-lanes {
+		padding-inline: 16px;
+	}
+	.lifecycle-lanes li {
+		grid-template-columns: 20px 1fr 12px;
+		gap: 8px;
+		padding: 20px 0;
+	}
+	.lifecycle-lanes h4 {
+		font-size: 20px;
+	}
+	.lane-number {
+		grid-column: 1;
+		grid-row: 1;
+		font-size: 9px;
+	}
+	.lane-state {
+		grid-column: 2;
+		grid-row: 2;
+		font-size: 9px;
+	}
+	.lane-indicator {
+		grid-column: 3;
+		grid-row: 1;
+		font-size: 10px;
+	}
+	.lifecycle-detail {
+		grid-template-columns: 1fr;
+		gap: 12px;
+		margin: 24px 16px;
+		min-height: 102px;
+	}
+	.lifecycle-detail p {
+		font-size: 12px;
+	}
+	.merro-controls {
+		gap: 8px;
+	}
+	.merro-controls .action-button {
+		gap: 16px;
+	}
+	.merro-controls .reset {
+		margin-left: auto;
+	}
+}

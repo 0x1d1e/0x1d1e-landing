@@ -1,0 +1,23 @@
+{
+	"$schema": "https://biomejs.dev/schemas/2.5.15/schema.json",
+	// Prettier and ESLint are the project formatter and Svelte-aware linter.
+	"formatter": { "enabled": false },
+	"assist": { "enabled": false },
+	"overrides": [
+		{
+			// Biome does not track references from Svelte templates.
+			"includes": ["**/*.svelte"],
+			"linter": { "enabled": false }
+		},
+		{
+			"includes": ["**/*.css"],
+			"linter": {
+				"rules": {
+					"style": { "noDescendingSpecificity": "off" },
+					// Reduced motion must override every interaction transition.
+					"complexity": { "noImportantStyles": "off" }
+				}
+			}
+		}
+	]
+}
