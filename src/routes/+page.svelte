@@ -1,10 +1,13 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { organization, community, projects, featured, areas, principles } from '$lib/content';
+	import { onMount, tick } from 'svelte';
+	import { organization, community, projects, featured, principles } from '$lib/content';
 	import KanadeDemo from '$lib/components/KanadeDemo.svelte';
 	import KinetixDemo from '$lib/components/KinetixDemo.svelte';
 	import MerroDemo from '$lib/components/MerroDemo.svelte';
-	let progress = $state(0);
+	import Showreel from '$lib/components/Showreel.svelte';
+
+	let enhanced = $state(false);
+	let selected = $state(featured[0].slug);
 	let filter = $state('All');
 	const topics = [
 		'All',
@@ -17,29 +20,34 @@
 	const visibleProjects = $derived(
 		projects.filter((project) => filter === 'All' || project.topics.includes(filter))
 	);
+
+	async function followStudyHash() {
+		const project = featured.find((project) => window.location.hash === `#study-${project.slug}`);
+		if (!project) return;
+		selected = project.slug;
+		await tick();
+		const panel = document.getElementById(`study-${project.slug}`);
+		panel?.focus({ preventScroll: true });
+		panel?.scrollIntoView({ block: 'start' });
+	}
+
+	async function exploreStudy(event: globalThis.MouseEvent, slug: string) {
+		if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey)
+			return;
+		event.preventDefault();
+		selected = slug;
+		await tick();
+		window.location.hash = `study-${slug}`;
+		const panel = document.getElementById(`study-${slug}`);
+		panel?.focus({ preventScroll: true });
+		panel?.scrollIntoView({ block: 'start' });
+	}
+
 	onMount(() => {
-		const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
-		let frame = 0;
-		function update() {
-			frame = 0;
-			const distance = document.documentElement.scrollHeight - window.innerHeight;
-			progress = preference.matches
-				? 0
-				: Math.min(1, Math.max(0, window.scrollY / Math.max(distance, 1)));
-		}
-		function schedule() {
-			if (!frame) frame = requestAnimationFrame(update);
-		}
-		update();
-		window.addEventListener('scroll', schedule, { passive: true });
-		window.addEventListener('resize', schedule);
-		preference.addEventListener('change', schedule);
-		return () => {
-			cancelAnimationFrame(frame);
-			window.removeEventListener('scroll', schedule);
-			window.removeEventListener('resize', schedule);
-			preference.removeEventListener('change', schedule);
-		};
+		enhanced = true;
+		void followStudyHash();
+		window.addEventListener('hashchange', followStudyHash);
+		return () => window.removeEventListener('hashchange', followStudyHash);
 	});
 </script>
 
@@ -58,136 +66,132 @@
 </svelte:head>
 
 <a class="skip-link" href="#main">Skip to content</a>
-<div class="site-shell">
-	<div class="workbench-rail" style={`--progress: ${progress}`} aria-hidden="true">
-		<div class="rail-progress"></div>
-		<span class="signal"></span><span class="rail-end"></span>
-	</div>
+<div class="site-shell" class:enhanced>
 	<header class="site-header">
 		<a class="nav-wordmark" href="#identity" aria-label="0x1d1e home"
 			>0x1d1e<span aria-hidden="true"> /</span></a
 		>
 		<nav aria-label="Main navigation">
-			<a href="#experiments">Experiments</a><a href="#principles">Principles</a><a
-				href={organization}>GitHub <span aria-hidden="true">↗</span></a
-			>
+			<a href="#experiments">Projects</a>
+			<a href="#principles">About</a>
+			<a href={organization}>GitHub <span aria-hidden="true">↗</span></a>
 		</nav>
 	</header>
-	<main id="main">
+	<main id="main" tabindex="-1">
 		<section class="hero" id="identity" aria-labelledby="identity-title">
-			<div class="hero-meta technical">
-				<span>INDEPENDENT SOFTWARE EXPERIMENTS</span><span>01 / IDLE CYCLES</span>
-			</div>
-			<h1 id="identity-title">0x1d1e<span class="wordmark-period" aria-hidden="true">.</span></h1>
-			<div class="hero-bottom">
-				<p class="hero-statement">software made<br />during idle cycles.</p>
-				<div class="hero-introduction">
-					<p>A loose group of people building software in the time between everything else.</p>
-					<p class="hero-small">
-						Infrastructure. Agents. Interfaces.<br />Whatever seems interesting next.
-					</p>
-					<a class="explore-link" href="#experiments"
-						>Explore the experiments <span aria-hidden="true">↓</span></a
-					>
-				</div>
-			</div>
-			<div class="hero-foot technical">
-				<span>SPARE TIME → WORKING SOFTWARE</span><span
-					>SCROLL TO THE WORKBENCH <span aria-hidden="true">↓</span></span
+			<div class="hero-introduction">
+				<p class="technical eyebrow">Independent software experiments</p>
+				<h1 id="identity-title">
+					software made<br />during <span class="secondary">idle cycles.</span>
+				</h1>
+				<p class="hero-copy">
+					A loose group building infrastructure, agents and interfaces in the time between
+					everything else.
+				</p>
+				<a class="explore-link" href="#experiments"
+					>Browse projects <span aria-hidden="true">↓</span></a
 				>
+				<a class="film-link" href="#showreel"
+					>Watch the 15-second film <span aria-hidden="true">↗</span></a
+				>
+				<p class="hero-note technical">
+					Public code. Open questions.<br />Experimental unless stated otherwise.
+				</p>
+			</div>
+
+			<div class="workbench" id="workbench" aria-labelledby="workbench-title">
+				<div class="workbench-heading">
+					<h2 class="technical" id="workbench-title">The workbench</h2>
+					<span class="technical">Three experiments / one surface</span>
+				</div>
+				<div class="study-selectors" role="group" aria-label="Choose an experiment">
+					{#each featured as project, index (project.slug)}
+						<button
+							aria-pressed={selected === project.slug}
+							aria-controls={`study-${project.slug}`}
+							onclick={() => (selected = project.slug)}
+						>
+							<span class="selector-index technical">0{index + 1}</span>
+							<span><strong>{project.name}</strong><small>{project.study.label}</small></span>
+						</button>
+					{/each}
+				</div>
+				<p class="workbench-disclaimer technical">Illustrative studies / not running software</p>
+				<noscript
+					><p class="static-note">
+						All three static studies are shown below. Enable JavaScript to change states and filter
+						repositories.
+					</p></noscript
+				>
+				<div class="workbench-panels">
+					{#each featured as project (project.slug)}
+						<article
+							class="study-panel"
+							class:inactive={enhanced && selected !== project.slug}
+							id={`study-${project.slug}`}
+							aria-labelledby={`${project.slug}-study-title`}
+							aria-hidden={enhanced && selected !== project.slug ? 'true' : undefined}
+							inert={enhanced && selected !== project.slug}
+							tabindex="-1"
+						>
+							<div class="study-heading">
+								<h3 id={`${project.slug}-study-title`}>{project.name}</h3>
+								<p>{project.summary}</p>
+							</div>
+							{#if project.demo === 'island'}<KanadeDemo
+								/>{:else if project.demo === 'routing'}<KinetixDemo />{:else}<MerroDemo />{/if}
+							<div class="study-footer">
+								<span class="technical">{project.status} / {project.study.stack}</span>
+								<a href={project.repository}
+									>{project.name} repository <span aria-hidden="true">↗</span></a
+								>
+							</div>
+						</article>
+					{/each}
+				</div>
 			</div>
 		</section>
 
-		<section class="section workbench" id="workbench" aria-labelledby="workbench-title">
-			<div class="section-label technical">
-				<span>02 / THE WORKBENCH</span><span>A FEW DIRECTIONS. NO FIXED DESTINATION.</span>
-			</div>
-			<div class="workbench-layout">
-				<div class="workbench-intro">
-					<h2 id="workbench-title">
-						Loose interests.<br />Working<br /><span class="secondary">connections.</span>
-					</h2>
-					<p>Small experiments in software and systems. Built whenever there are spare cycles.</p>
-					<span class="technical editorial-note">SELECT A DIRECTION → FIND AN EXPERIMENT</span>
-				</div>
-				<ul class="area-list">
-					{#each areas as area, index (area.name)}<li>
-							<a href={`#${area.project}`}
-								><span class="area-index technical">0{index + 1}</span>
-								<div>
-									<h3>{area.name}</h3>
-									<p>{area.description}</p>
-									<span class="technical area-project">{area.annotation}</span>
-								</div>
-								<span class="area-arrow" aria-hidden="true">↗</span></a
-							>
-						</li>{/each}
-				</ul>
-			</div>
-			<div class="process-strip" aria-label="Editorial experiment process">
-				<span class="technical">AN EXPERIMENT, IN FIVE VERBS</span>
-				<ol>
-					<li>Be curious</li>
-					<li>Build</li>
-					<li>Run</li>
-					<li>Verify</li>
-					<li>Keep or discard</li>
-				</ol>
-				<p>An organizing idea. Not an internal pipeline.</p>
-			</div>
-		</section>
+		<Showreel />
 
 		<section class="section experiments" id="experiments" aria-labelledby="experiments-title">
 			<div class="section-label technical">
-				<span>03 / SELECTED EXPERIMENTS</span><span>PUBLIC CODE. OPEN QUESTIONS.</span>
+				<span>01 / Selected experiments</span><span>Different questions. Working answers.</span>
 			</div>
-			<div class="experiments-intro">
-				<h2 id="experiments-title">
-					Less hypothetical.<br />More <span class="secondary">hands-on.</span>
-				</h2>
-				<p>Three things we built.<br />Three different ways to try an idea.</p>
+			<div class="section-intro">
+				<h2 id="experiments-title">Three things<br />on the bench.</h2>
+				<p>Separate projects, not one platform.<br />Follow the idea that interests you.</p>
 			</div>
 			{#each featured as project, index (project.slug)}
-				<article
-					class={`project project-${project.slug}`}
-					id={project.slug}
-					aria-labelledby={`${project.slug}-title`}
-					tabindex="-1"
-				>
-					<div class="project-heading">
-						<div>
-							<span class="technical project-code">EXPERIMENT / 0{index + 1}</span>
-							<h3 id={`${project.slug}-title`}>
-								<a href={project.repository}>{project.name}<span aria-hidden="true">↗</span></a>
-							</h3>
-						</div>
-						<div class="project-summary">
-							<p>{project.summary}</p>
-							<span class="technical"
-								>{project.slug === 'kanade'
-									? 'RUST / AMANE / NIRI'
-									: project.slug === 'kinetix'
-										? 'RUST / SELF-HOSTED / WASM PLUGINS'
-										: 'PI / TMUX / GIT'}</span
+				<article class="project-note" id={project.slug} aria-labelledby={`${project.slug}-title`}>
+					<div class="note-name">
+						<span class="technical">Experiment / 0{index + 1}</span>
+						<h3 id={`${project.slug}-title`}>
+							<a href={project.repository}>{project.name}<span aria-hidden="true">↗</span></a>
+						</h3>
+						<p class="technical">{project.study.stack}</p>
+					</div>
+					<div class="note-content">
+						<p class="note-idea">{project.study.idea}</p>
+						<p class="note-boundary">{project.study.boundary}</p>
+						{#if project.slug === 'kinetix'}
+							<p class="project-notice">
+								Version reboot planned, with breaking contract changes. <a
+									href={`${project.repository}/blob/5ef971f5777d40553dbd9b4fa98e767bb6356eb0/docs/reboot.md`}
+									>Read the plan ↗</a
+								>
+							</p>
+						{/if}
+						<div class="note-actions">
+							<a
+								class="study-link"
+								href={`#study-${project.slug}`}
+								onclick={(event) => exploreStudy(event, project.slug)}
+								>Explore {project.name} study <span aria-hidden="true">↑</span></a
 							>
+							<a href={project.source}>Read the docs <span aria-hidden="true">↗</span></a>
 						</div>
 					</div>
-					{#if project.demo === 'island'}<KanadeDemo
-						/>{:else if project.demo === 'routing'}<KinetixDemo />{:else}<MerroDemo />{/if}
-					<div class="project-footer">
-						<span class="technical">EXPERIMENTAL / CHECK THE REPOSITORY</span>
-						<div>
-							<a href={project.source}>Read the docs <span aria-hidden="true">↗</span></a><a
-								href={project.repository}>View repository <span aria-hidden="true">↗</span></a
-							>
-						</div>
-					</div>
-					{#if project.slug === 'kinetix'}<p class="project-notice">
-							Version reboot planned. Kinetix and its plugins document breaking contract changes. <a
-								href={`${project.repository}/blob/5ef971f5777d40553dbd9b4fa98e767bb6356eb0/docs/reboot.md`}
-								>Read the plan ↗</a
-							>
-						</p>{/if}
 				</article>
 			{/each}
 		</section>
@@ -198,9 +202,9 @@
 			aria-labelledby="repositories-title"
 		>
 			<div class="section-label technical">
-				<span>04 / REPOSITORY INDEX</span><span>THE EXPERIMENTS & THEIR SATELLITES</span>
+				<span>02 / Repository index</span><span>The experiments & their satellites</span>
 			</div>
-			<div class="index-heading">
+			<div class="section-intro">
 				<h2 id="repositories-title">There’s more<br />on the bench.</h2>
 				<p>
 					Primary projects, prototypes and the tools around them. Public code is not a stability
@@ -214,25 +218,28 @@
 					>{/each}
 			</div>
 			<p class="filter-status technical" role="status">
-				{visibleProjects.length} REPOSITORIES / {filter.toUpperCase()}
+				{visibleProjects.length} repositories / {filter}
 			</p>
 			<div class="catalogue">
 				<div class="catalogue-header technical" aria-hidden="true">
-					<span>PROJECT / REPOSITORY</span><span>WHAT IT IS</span><span>STATE</span><span>LINK</span
+					<span>Project / repository</span><span>What it is</span><span>State</span><span>Link</span
 					>
 				</div>
 				<ul>
-					{#each visibleProjects as project (project.slug)}<li class:satellite={!!project.parent}>
-							<a href={project.repository}
-								><span class="catalogue-name"
+					{#each visibleProjects as project (project.slug)}
+						<li class:satellite={!!project.parent}>
+							<a href={project.repository}>
+								<span class="catalogue-name"
 									>{#if project.parent}<span class="satellite-mark" aria-hidden="true">↳</span
 										>{/if}{project.name}<small class="technical">{project.topics.join(' / ')}</small
 									></span
-								><span class="catalogue-summary">{project.summary}</span><span
-									class="catalogue-status technical">{project.status}</span
-								><span class="catalogue-arrow" aria-hidden="true">↗</span></a
-							>
-						</li>{/each}
+								>
+								<span class="catalogue-summary">{project.summary}</span>
+								<span class="catalogue-status technical">{project.status}</span>
+								<span class="catalogue-arrow" aria-hidden="true">↗</span>
+							</a>
+						</li>
+					{/each}
 				</ul>
 			</div>
 			<p class="index-note">
@@ -244,40 +251,44 @@
 
 		<section class="section philosophy" id="principles" aria-labelledby="principles-title">
 			<div class="section-label technical">
-				<span>05 / WHY WE BUILD</span><a href={community.source}>FROM THE ORGANIZATION PROFILE ↗</a>
+				<span>03 / Why we build</span><a href={community.source}>Organization profile ↗</a>
 			</div>
-			<h2 id="principles-title">
-				What if<br />we just<br /><span class="secondary">built it?</span>
-			</h2>
-			<div class="philosophy-bottom">
-				<p class="philosophy-aside">
-					Sometimes a useful tool.<br />Sometimes an answer to one question.<br /><span
-						>Both are valid outcomes.</span
-					>
-				</p>
+			<div class="philosophy-layout">
+				<div>
+					<h2 id="principles-title">
+						What if we<br /><span class="secondary">just built it?</span>
+					</h2>
+					<p class="philosophy-aside">
+						Sometimes a useful tool. Sometimes a prototype that answers one question. Both are valid
+						outcomes.
+					</p>
+				</div>
 				<ol class="principle-list">
-					{#each principles as principle, index (principle.title)}<li>
+					{#each principles as principle, index (principle.title)}
+						<li>
 							<span class="technical">0{index + 1}</span>
 							<div>
 								<h3>{principle.title}</h3>
 								<p>{principle.copy}</p>
 							</div>
-						</li>{/each}
+						</li>
+					{/each}
 				</ol>
 			</div>
 		</section>
 
-		<section class="section open-end" id="open-end" aria-labelledby="closing-title">
+		<section class="section open-end" aria-labelledby="closing-title">
 			<div class="section-label technical">
-				<span>06 / OPEN END</span><span>KEEP THE USEFUL PARTS.</span>
+				<span>04 / Open end</span><span>No fixed destination</span>
 			</div>
 			<div class="closing-layout">
-				<h2 id="closing-title">Read the code.<br />Break it.<br />Keep the useful parts.</h2>
+				<h2 id="closing-title">Keep the<br />useful parts.</h2>
 				<div class="closing-links">
 					<a class="explore-link" href={organization}
 						>Explore GitHub <span aria-hidden="true">↗</span></a
-					><a href="#repositories">Browse projects <span aria-hidden="true">↑</span></a><a
-						href={community.contributing}
+					>
+					<a href="#repositories">Browse all projects <span aria-hidden="true">↑</span></a>
+					<a href={community.contributing}
 						>Contributing guidelines <span aria-hidden="true">↗</span></a
 					>
 				</div>

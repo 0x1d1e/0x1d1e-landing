@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { assert, describe, expect, it } from 'vitest';
 import { projects, featured, validateProjects, type Project } from './content';
 const valid = (): Project => ({ ...projects[0], topics: [...projects[0].topics] });
 describe('Git-backed content contract', () => {
@@ -18,6 +18,15 @@ describe('Git-backed content contract', () => {
 		expect(() => validateProjects([{ ...valid(), summary: '' }])).toThrow('Incomplete');
 		expect(() => validateProjects([{ ...valid(), status: 'Stable' as Project['status'] }])).toThrow(
 			'status'
+		);
+	});
+	it('requires complete study content for every demonstration', () => {
+		expect(() => validateProjects([{ ...valid(), study: undefined }])).toThrow('study');
+		expect(() => validateProjects([{ ...valid(), demo: undefined }])).toThrow('study');
+		const study = valid().study;
+		assert(study, 'Fixture must include study content');
+		expect(() => validateProjects([{ ...valid(), study: { ...study, boundary: '' } }])).toThrow(
+			'Incomplete study'
 		);
 	});
 	it('rejects dangling ecosystem references', () =>

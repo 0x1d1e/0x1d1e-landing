@@ -12,7 +12,8 @@
 		"lint": "eslint . && prettier --check .",
 		"format": "prettier --write .",
 		"test": "vitest run",
-		"test:e2e": "playwright test"
+		"test:e2e": "playwright test",
+		"render:film": "node scripts/render-showreel.mjs"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-static": "^3.0.0",

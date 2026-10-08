@@ -33,7 +33,7 @@
 				class="route-secondary"
 			/>
 			{#if sent}<circle
-					cx={result.target === 'A' ? 775 : 775}
+					cx="775"
 					cy={result.target === 'A' ? 70 : 230}
 					r="5"
 					class="request-dot"

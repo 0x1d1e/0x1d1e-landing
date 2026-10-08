@@ -4,6 +4,12 @@ export const community = {
 	security: `${organization}/.github/blob/main/SECURITY.md`,
 	source: `${organization}/.github/blob/7213edcb9734b3fac433b4bdb33b5c1d43115f1e/profile/README.md`
 };
+type Study = {
+	label: string;
+	stack: string;
+	idea: string;
+	boundary: string;
+};
 export type Project = {
 	name: string;
 	slug: string;
@@ -13,6 +19,7 @@ export type Project = {
 	status: 'Experimental' | 'Prototype' | 'Supporting';
 	source: string;
 	demo?: 'island' | 'routing' | 'lifecycle';
+	study?: Study;
 	parent?: string;
 };
 const repo = (name: string) => `${organization}/${name}`;
@@ -25,6 +32,12 @@ export const projects: Project[] = [
 		topics: ['Linux desktop', 'Interfaces'],
 		status: 'Experimental',
 		demo: 'island',
+		study: {
+			label: 'An anchored interface',
+			stack: 'Rust / Amane / niri',
+			idea: 'A clock, an Activity, a Surface. The shape changes; the top-center anchor stays put.',
+			boundary: 'Built for niri. Not a bar or dock, and not compatible with Hyprland or Sway.'
+		},
 		source: `${repo('kanade')}/blob/755ce859d4d7b6466f387bafed17e695e5c21058/README.md`
 	},
 	{
@@ -55,6 +68,12 @@ export const projects: Project[] = [
 		topics: ['AI infrastructure', 'Developer tooling'],
 		status: 'Experimental',
 		demo: 'routing',
+		study: {
+			label: 'A routing decision',
+			stack: 'Rust / self-hosted / WASM plugins',
+			idea: 'One client endpoint, operator-defined Routes. Try another eligible target before committing the response.',
+			boundary: 'Once a response is committed, a later failure cannot switch to another target.'
+		},
 		source: `${repo('kinetix')}/blob/5ef971f5777d40553dbd9b4fa98e767bb6356eb0/README.md`
 	},
 	{
@@ -85,42 +104,19 @@ export const projects: Project[] = [
 		topics: ['Coding agents', 'Developer tooling'],
 		status: 'Experimental',
 		demo: 'lifecycle',
+		study: {
+			label: 'A reviewed change',
+			stack: 'Pi / tmux / Git',
+			idea: 'Approve a plan, then follow a change through implementation, fresh review and local delivery.',
+			boundary:
+				'GitHub is optional. Host workers use your normal permissions; they are not a security sandbox.'
+		},
 		source: `${repo('merro')}/blob/d019db27c88de2a96ff4d6f38b3b18a73b16f94a/README.md`
 	}
 ];
-export const featured = projects.filter((project) => project.demo);
-export const areas = [
-	{
-		name: 'AI infrastructure',
-		description: 'One endpoint. More than one way through.',
-		project: 'kinetix',
-		annotation: 'Kinetix / routing'
-	},
-	{
-		name: 'Coding agents',
-		description: 'Give the work a goal. Give the result a review.',
-		project: 'merro',
-		annotation: 'Merro / orchestration'
-	},
-	{
-		name: 'Developer tooling',
-		description: 'Tools for the tools we already use.',
-		project: 'merro',
-		annotation: 'Merro / Pi + tmux + Git'
-	},
-	{
-		name: 'Linux desktop',
-		description: 'A little surface for what is happening now.',
-		project: 'kanade',
-		annotation: 'Kanade / niri'
-	},
-	{
-		name: 'Interfaces & systems',
-		description: 'Find the shape by making it work.',
-		project: 'kanade',
-		annotation: 'Kanade / interaction'
-	}
-];
+export const featured = projects.filter(
+	(project): project is Project & { study: Study } => !!project.demo && !!project.study
+);
 export const principles = [
 	{
 		title: 'Build first',
@@ -153,6 +149,10 @@ export function validateProjects(entries: Project[]) {
 			if (url.origin !== 'https://github.com' || !url.pathname.startsWith('/0x1d1e/'))
 				throw new Error('Project source must be public organization GitHub');
 		}
+		if (!!project.demo !== !!project.study)
+			throw new Error('A demonstration requires study content');
+		if (project.study && Object.values(project.study).some((value) => !value.trim()))
+			throw new Error('Incomplete study content');
 		if (!['Experimental', 'Prototype', 'Supporting'].includes(project.status))
 			throw new Error('Invalid project status');
 	}

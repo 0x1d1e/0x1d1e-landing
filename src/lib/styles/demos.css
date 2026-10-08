@@ -4,29 +4,32 @@
 }
 .demo-topline {
 	font-family: var(--mono);
-	font-size: 10px;
+	font-size: 12px;
 	line-height: 1.5;
 	display: flex;
 	justify-content: space-between;
 	gap: 16px;
-	padding: 22px 28px;
+	padding: 18px 24px;
 	border-bottom: 1px solid var(--line);
 	color: var(--secondary);
+}
+.demo-topline > span:last-child {
+	text-align: right;
 }
 .demo-controls,
 .route-scenarios {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 8px;
-	padding: 0 28px;
+	padding: 0 24px;
 }
 .demo-controls button,
 .route-scenarios button,
 .route-actions button {
 	background: transparent;
 	border: 1px solid var(--line);
-	min-height: 46px;
-	padding: 12px 18px;
+	min-height: 44px;
+	padding: 10px 12px;
 	font-size: 12px;
 }
 .demo-controls button[aria-pressed='true'],
@@ -44,19 +47,19 @@
 	border-color: transparent;
 	color: var(--secondary);
 	display: flex;
-	gap: 16px;
+	gap: 12px;
 	align-items: center;
 }
 .demo-description {
 	font-size: 14px;
-	padding: 20px 28px 0;
+	padding: 18px 24px 0;
 	color: var(--ink);
-	min-height: 46px;
+	min-height: 62px;
 }
 .illustration-note {
-	font-size: 11px;
+	font-size: 12px;
 	color: var(--muted);
-	padding: 12px 28px 22px;
+	padding: 12px 24px 20px;
 	line-height: 1.6;
 }
 
@@ -73,16 +76,16 @@
 }
 .island-field {
 	position: relative;
-	height: 352px;
+	height: 276px;
 	display: flex;
 	justify-content: center;
-	padding-top: 46px;
+	padding-top: 32px;
 }
 .island-axis {
 	position: absolute;
 	left: 50%;
 	top: 0;
-	bottom: 82px;
+	bottom: 66px;
 	width: 1px;
 	background: #a2a89a;
 }
@@ -92,7 +95,7 @@
 	height: 1px;
 	background: #737c6c;
 	position: absolute;
-	top: 24px;
+	top: 16px;
 	left: -6px;
 }
 .island {
@@ -116,12 +119,12 @@
 	height: 50px;
 }
 .island.peek {
-	width: 310px;
+	width: min(310px, calc(100% - 32px));
 	height: 84px;
 	border-radius: 30px;
 }
 .island.expanded {
-	width: 370px;
+	width: min(370px, calc(100% - 24px));
 	height: 178px;
 	border-radius: 30px;
 }
@@ -132,19 +135,19 @@
 .island-content {
 	width: 100%;
 	display: grid;
-	grid-template-columns: 48px 1fr;
-	gap: 10px 16px;
+	grid-template-columns: 44px minmax(0, 1fr);
+	gap: 8px 12px;
 	align-items: center;
-	padding: 18px 24px;
+	padding: 16px;
 }
 .compact .island-content {
-	grid-template-columns: 28px 1fr 16px;
+	grid-template-columns: 28px minmax(0, 1fr) 16px;
 	padding: 10px 16px;
 	gap: 10px;
 }
 .record-symbol {
-	width: 48px;
-	height: 48px;
+	width: 44px;
+	height: 44px;
 	border: 1px solid #4b504a;
 	display: grid;
 	place-items: center;
@@ -172,10 +175,10 @@
 }
 .track-copy > span {
 	display: block;
-	margin-top: 5px;
+	margin-top: 4px;
 	color: #b1b5b2;
-	font-size: 11px;
-	white-space: nowrap;
+	font-size: 12px;
+	line-height: 1.4;
 }
 .compact .track-copy strong {
 	font-size: 13px;
@@ -188,23 +191,25 @@
 	grid-column: 1 / -1;
 	height: 1px;
 	background: #303536;
-	margin-top: 10px;
+	margin-top: 6px;
 }
 .media-controls {
 	display: flex;
 	grid-column: 1 / -1;
 	align-items: center;
 	justify-content: space-between;
+	gap: 8px;
 }
 .media-controls > span {
 	font-family: var(--mono);
-	font-size: 10px;
+	font-size: 12px;
 }
 .media-controls small {
 	color: #b1b5b2;
-	font-size: 9px;
+	font-size: 12px;
 }
 .media-toggle {
+	flex-shrink: 0;
 	width: 44px;
 	height: 44px;
 	border: 1px solid #303536;
@@ -214,25 +219,24 @@
 }
 .field-annotation {
 	position: absolute;
-	bottom: 38px;
+	bottom: 20px;
 	font-family: var(--mono);
-	font-size: 10px;
-	letter-spacing: 0.045em;
+	font-size: 12px;
 	color: var(--field-secondary);
 }
 .field-annotation > span {
 	display: block;
 	text-align: center;
-	font-size: 24px;
-	margin-bottom: 8px;
+	font-size: 20px;
+	margin-bottom: 4px;
 }
 .field-coordinate {
 	position: absolute;
-	right: 28px;
-	top: 46px;
+	right: 24px;
+	top: 32px;
 	color: var(--field-secondary);
 	font-family: var(--mono);
-	font-size: 10px;
+	font-size: 12px;
 	line-height: 1.5;
 }
 .kanade-demo .demo-controls button {
@@ -265,8 +269,8 @@
 	background: var(--ground);
 }
 .route-field {
-	height: 326px;
-	margin: 24px 28px 20px;
+	height: 276px;
+	margin: 20px 24px;
 	position: relative;
 }
 .route-lines {
@@ -302,28 +306,28 @@
 	position: absolute;
 	background: var(--ground);
 	border: 1px solid var(--line);
-	padding: 18px 20px;
+	padding: 14px 12px;
 	width: 25%;
-	min-height: 106px;
+	min-height: 112px;
 	transform: translate(-50%, -50%);
 }
 .route-node .technical {
-	font-size: 9px;
+	font-size: 12px;
 	color: var(--muted);
 	display: block;
-	white-space: nowrap;
 }
 .route-node strong {
 	display: block;
 	font-family: var(--display);
 	font-weight: 500;
-	font-size: 26px;
+	font-size: 24px;
 	letter-spacing: -0.04em;
 	margin: 7px 0;
 }
 .route-node small {
 	display: block;
-	font-size: 11px;
+	font-size: 12px;
+	line-height: 1.4;
 	color: var(--secondary);
 }
 .client {
@@ -355,8 +359,8 @@
 	display: flex;
 	align-items: center;
 	flex-wrap: wrap;
-	gap: 16px;
-	padding: 20px 28px 0;
+	gap: 12px;
+	padding: 18px 24px 0;
 }
 .demo .action-button {
 	border-color: var(--signal);
@@ -364,28 +368,18 @@
 	display: inline-flex;
 	align-items: center;
 	justify-content: space-between;
-	gap: 26px;
+	gap: 20px;
 }
 .route-actions .reset {
 	margin-left: 0;
 }
 .route-state {
-	margin-left: auto;
 	color: var(--secondary);
-}
-.kinetix-demo .demo-description {
-	max-width: 750px;
+	flex-basis: 100%;
 }
 
-.merro-demo {
-	background: var(--surface);
-}
 .merro-objective {
-	padding: 30px 28px;
-	display: grid;
-	grid-template-columns: 160px 1fr;
-	align-items: center;
-	gap: 8px;
+	padding: 20px 24px;
 	border-bottom: 1px solid var(--line);
 }
 .merro-objective > span {
@@ -393,39 +387,38 @@
 }
 .merro-objective > p {
 	font-family: var(--display);
-	font-size: 30px;
+	font-size: 26px;
 	letter-spacing: -0.04em;
 	line-height: 1.2;
+	margin-block: 8px;
 }
 .merro-objective > span:last-child {
-	grid-column: 2;
-	font-size: 9px;
 	color: var(--muted);
 }
 .lifecycle-lanes {
-	padding: 0 28px;
+	padding: 0 24px;
 }
 .lifecycle-lanes li {
 	display: grid;
-	grid-template-columns: 46px 1fr 180px 24px;
+	grid-template-columns: 24px minmax(0, 1fr) 144px 16px;
 	align-items: center;
-	gap: 16px;
-	padding: 24px 0;
+	gap: 12px;
+	padding: 16px 0;
 	border-bottom: 1px solid var(--line);
 }
 .lane-number {
 	font-family: var(--mono);
-	font-size: 11px;
+	font-size: 12px;
 	color: var(--muted);
 }
 .lifecycle-lanes h4 {
-	font-size: 25px;
+	font-size: 20px;
 	letter-spacing: -0.035em;
 	color: var(--secondary);
 }
 .lane-state {
 	font-family: var(--mono);
-	font-size: 10px;
+	font-size: 12px;
 	color: var(--muted);
 }
 .lane-indicator {
@@ -443,128 +436,46 @@
 	color: var(--ink);
 }
 .lifecycle-detail {
-	margin: 26px 28px;
-	display: grid;
-	grid-template-columns: 200px 1fr;
-	gap: 30px;
-	min-height: 50px;
+	margin: 20px 24px;
+	min-height: 90px;
 }
 .lifecycle-detail > span {
 	color: var(--secondary);
+	display: block;
+	margin-bottom: 8px;
 }
 .lifecycle-detail p {
 	font-size: 14px;
-	max-width: 620px;
 }
 .merro-controls {
 	padding-bottom: 8px;
 }
 
-@media (max-width: 1100px) {
-	.route-node {
-		padding: 14px 12px;
-	}
-	.route-node .technical {
-		font-size: 8px;
-	}
-	.route-node strong {
-		font-size: 24px;
-	}
-	.route-state {
-		flex-basis: 100%;
-		margin-left: 0;
-	}
-}
-@media (max-width: 760px) {
+@container study (max-width: 640px) {
 	.demo-topline {
-		padding: 18px 16px;
-		font-size: 8px;
-	}
-	.demo-topline > span:last-child {
-		text-align: right;
+		padding-inline: 16px;
 	}
 	.demo-controls,
 	.route-scenarios {
 		padding-inline: 16px;
-		gap: 8px;
-	}
-	.demo-controls button,
-	.route-scenarios button,
-	.route-actions button {
-		padding: 10px 12px;
-		font-size: 11px;
-		min-height: 44px;
 	}
 	.demo-controls .reset {
 		margin-left: 0;
 	}
 	.demo-description {
-		padding: 18px 16px 0;
-		font-size: 12px;
-		min-height: 56px;
+		padding-inline: 16px;
 	}
 	.illustration-note {
-		padding: 12px 16px 20px;
-		font-size: 10px;
-	}
-	.island-field {
-		height: 300px;
-		padding-top: 36px;
-	}
-	.island.expanded {
-		width: calc(100% - 24px);
-		max-width: 370px;
-		height: 168px;
-		border-radius: 24px;
-	}
-	.island.peek {
-		width: calc(100% - 44px);
-		max-width: 310px;
-	}
-	.island.compact {
-		width: 214px;
-	}
-	.island-content {
-		padding: 16px;
-		gap: 10px 12px;
-		grid-template-columns: 40px 1fr;
-	}
-	.record-symbol {
-		height: 40px;
-		width: 40px;
-	}
-	.track-copy strong {
-		font-size: 16px;
-	}
-	.track-copy > span {
-		font-size: 9px;
+		padding-inline: 16px;
 	}
 	.field-coordinate {
 		display: none;
 	}
-	.field-annotation {
-		font-size: 8px;
-		bottom: 30px;
-	}
-	.field-annotation > span {
-		font-size: 20px;
-	}
-	.kanade-demo .demo-controls {
-		gap: 6px;
-	}
-	.kanade-demo .demo-controls button {
-		padding-inline: 10px;
-	}
-	.kanade-demo .demo-controls .reset {
-		flex-basis: 100%;
-		justify-content: end;
-	}
 	.route-field {
 		height: auto;
 		display: grid;
-		grid-template-columns: 1fr 1fr;
-		padding: 8px 0 0;
-		margin: 20px 16px 28px;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		margin: 20px 16px;
 		gap: 28px 12px;
 	}
 	.route-lines {
@@ -576,18 +487,7 @@
 		left: auto;
 		transform: none;
 		width: 100%;
-		min-height: 96px;
-		padding: 14px 12px;
-	}
-	.route-node .technical {
-		font-size: 7px;
-		white-space: normal;
-	}
-	.route-node strong {
-		font-size: 23px;
-	}
-	.route-node small {
-		font-size: 10px;
+		min-height: 100px;
 	}
 	.client,
 	.router {
@@ -598,7 +498,7 @@
 		content: '↓';
 		position: absolute;
 		color: var(--secondary);
-		bottom: -26px;
+		bottom: -25px;
 		left: 50%;
 		font-family: var(--mono);
 		font-size: 14px;
@@ -609,66 +509,50 @@
 		transform: translateX(-50%);
 	}
 	.route-actions {
-		padding: 20px 16px 0;
-		gap: 8px;
-	}
-	.route-state {
-		font-size: 9px;
-		margin-top: 10px;
+		padding-inline: 16px;
 	}
 	.merro-objective {
-		display: block;
-		padding: 24px 16px;
-	}
-	.merro-objective p {
-		font-size: 25px;
-		margin: 12px 0;
-	}
-	.merro-objective > span:last-child {
-		font-size: 8px;
+		padding-inline: 16px;
 	}
 	.lifecycle-lanes {
 		padding-inline: 16px;
 	}
 	.lifecycle-lanes li {
-		grid-template-columns: 20px 1fr 12px;
-		gap: 8px;
-		padding: 20px 0;
-	}
-	.lifecycle-lanes h4 {
-		font-size: 20px;
+		grid-template-columns: 20px minmax(0, 1fr) 12px;
+		gap: 6px 10px;
 	}
 	.lane-number {
 		grid-column: 1;
 		grid-row: 1;
-		font-size: 9px;
 	}
 	.lane-state {
 		grid-column: 2;
 		grid-row: 2;
-		font-size: 9px;
 	}
 	.lane-indicator {
 		grid-column: 3;
 		grid-row: 1;
-		font-size: 10px;
 	}
 	.lifecycle-detail {
-		grid-template-columns: 1fr;
-		gap: 12px;
-		margin: 24px 16px;
-		min-height: 102px;
+		margin-inline: 16px;
 	}
-	.lifecycle-detail p {
-		font-size: 12px;
+}
+@container study (max-width: 340px) {
+	.demo-topline {
+		flex-wrap: wrap;
+		gap: 6px;
 	}
-	.merro-controls {
-		gap: 8px;
+	.demo-topline > span:last-child {
+		text-align: left;
 	}
-	.merro-controls .action-button {
-		gap: 16px;
+	.kanade-demo .demo-controls .reset {
+		flex-basis: 100%;
+		justify-content: end;
+	}
+	.route-node strong {
+		font-size: 18px;
 	}
 	.merro-controls .reset {
-		margin-left: auto;
+		margin-left: 0;
 	}
 }
